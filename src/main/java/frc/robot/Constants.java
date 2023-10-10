@@ -133,6 +133,21 @@ public final class Constants {
     public static final class ArmConstants {
        public static final int armLeader = 1;
        public static final int armFollower = 2;
+
+       public static final double kGearRatio = (64.0 / 16.0) * 5.0;
+       public static final double kP = 0.45;
+       public static final double kI = 0.0;
+       public static final double kD = 0.0;
+       public static final double kFF = 0.0;
+   
+       public static final double kSVolts = 0.07; //Changed from ).07
+       public static final double kGVolts = 1.01;
+       public static final double kVVoltSecondPerRad = 0.39;
+       public static final double kAVoltSecondSquaredPerRad = 0.05;
+   
+       public static final double kMaxVelocityRadPerSecond = 0.5;
+       public static final double kMaxAccelerationRadPerSecSquared = 0.5;
+
     }
 
     public static final class IntakeConstants {

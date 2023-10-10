@@ -34,9 +34,17 @@ public class RobotContainer {
     private final JoystickButton intakeIn = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton intakeOut = new JoystickButton(driver, XboxController.Button.kB.value);
 
+
+    /* Arm buttons */
+    private final JoystickButton armDown = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton armUp = new JoystickButton(driver, XboxController.Button.kY.value);
+
+
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Intake m_Intake = new Intake();
+
+    private final Arm m_Arm = new Arm();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -66,11 +74,15 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
         /* Intake Commands */
-        intakeIn.onTrue(new InstantCommand(() -> m_Intake.runIntakeSpeed(-.5, -.5)));
+        intakeIn.onTrue(new InstantCommand(() -> m_Intake.runIntakeSpeed(-.75, -.75)));
         intakeIn.onFalse(new InstantCommand(() -> m_Intake.runIntakeSpeed(0, 0)));
       
         intakeOut.onTrue(new InstantCommand(() -> m_Intake.runIntakeSpeed(1, .5)));
         intakeOut.onFalse(new InstantCommand(() -> m_Intake.runIntakeSpeed(0, 0)));
+        
+        /*Arm Commands */
+        armDown.onTrue(m_Arm.setArmGoalCommand(0.7));
+        armUp.onTrue(m_Arm.setArmGoalCommand(2.96));
 
     }
 
