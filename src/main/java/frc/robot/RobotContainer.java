@@ -1,11 +1,17 @@
 package frc.robot;
 
+import java.util.Set;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -18,6 +24,9 @@ import frc.robot.subsystems.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
+    private final SendableChooser<SequentialCommandGroup> autoChooser;
+    private final AutoCommands autos;    
     /* Controllers */
     private final Joystick driver = new Joystick(0);
 
@@ -28,7 +37,6 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
     /* Intake buttons */
     private final JoystickButton intakeIn = new JoystickButton(driver, XboxController.Button.kA.value);
@@ -36,15 +44,14 @@ public class RobotContainer {
 
 
     /* Arm buttons */
-    private final JoystickButton armDown = new JoystickButton(driver, XboxController.Button.kX.value);
-    private final JoystickButton armUp = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton armDown = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton armUp = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
 
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
-    private final Intake m_Intake = new Intake();
-
-    private final Arm m_Arm = new Arm();
+    public static final Swerve s_Swerve = new Swerve();
+    public static final Intake m_Intake = new Intake();
+    public static final Arm m_Arm = new Arm();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -55,9 +62,23 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
+                () -> false
             )
         );
+
+        autos = new AutoCommands(s_Swerve);
+        autoChooser = new SendableChooser<>();
+    
+        Set<String> keys = autos.autos.keySet();
+        autoChooser.setDefaultOption((String) keys.toArray()[1], autos.autos.get(keys.toArray()[1]));
+        //keys.remove((String) keys.toArray()[0]);
+        
+        for (String i : autos.autos.keySet()) {
+            autoChooser.addOption(i, autos.autos.get(i));
+        }
+
+        SmartDashboard.putData("Auto Selector", autoChooser);
+        
 
         // Configure the button bindings
         configureButtonBindings();
@@ -74,15 +95,15 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
         /* Intake Commands */
-        intakeIn.onTrue(new InstantCommand(() -> m_Intake.runIntakeSpeed(-.75, -.75)));
+        intakeIn.onTrue(new IntakeInn(m_Intake));
         intakeIn.onFalse(new InstantCommand(() -> m_Intake.runIntakeSpeed(0, 0)));
       
-        intakeOut.onTrue(new InstantCommand(() -> m_Intake.runIntakeSpeed(1, .5)));
+        intakeOut.onTrue(new InstantCommand(() -> m_Intake.runIntakeSpeed(1, 1)));
         intakeOut.onFalse(new InstantCommand(() -> m_Intake.runIntakeSpeed(0, 0)));
         
         /*Arm Commands */
         armDown.onTrue(m_Arm.setArmGoalCommand(0.7));
-        armUp.onTrue(m_Arm.setArmGoalCommand(2.96));
+        armUp.onTrue(m_Arm.setArmGoalCommand(3.05));
 
     }
 
@@ -92,7 +113,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
-    }
+        return autoChooser.getSelected();
+     }
 }

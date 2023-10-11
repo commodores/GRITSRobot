@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -20,6 +22,7 @@ public class Intake extends SubsystemBase {
 
   private final CANSparkMax intakeInnerMotor;
   private final CANSparkMax intakeOuterMotor;
+  private final TimeOfFlight m_rangeSensor;
   
 
   /** Creates a new Intake. */
@@ -34,18 +37,26 @@ public class Intake extends SubsystemBase {
     intakeOuterMotor.restoreFactoryDefaults();
     intakeOuterMotor.setSmartCurrentLimit(30);
     intakeOuterMotor.setIdleMode(IdleMode.kBrake);
+
+    m_rangeSensor = new TimeOfFlight(22);
+    m_rangeSensor.setRangingMode(RangingMode.Short, 40);
     
   }
 
   public void runIntakeSpeed(double speedInner, double speedOuter){
       intakeInnerMotor.set(speedInner);
-      intakeOuterMotor.set(speedOuter);
+      intakeOuterMotor.set(speedOuter);   
+  }
+
+  public double getDistance(){
+    return m_rangeSensor.getRange();
   }
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Distance", m_rangeSensor.getRange());
   }
 
 }

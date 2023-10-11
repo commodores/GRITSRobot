@@ -42,7 +42,7 @@ public class Arm extends TrapezoidProfileSubsystem {
         // The constraints for the generated profiles
         new TrapezoidProfile.Constraints(0, 0),
         // The initial position of the mechanism
-      2.96);
+      3.05);
 
     armLeader = new CANSparkMax(Constants.ArmConstants.armLeader, MotorType.kBrushless);
     armFollower = new CANSparkMax(Constants.ArmConstants.armFollower, MotorType.kBrushless);
