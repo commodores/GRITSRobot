@@ -42,6 +42,9 @@ public class RobotContainer {
     private final JoystickButton intakeIn = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton intakeOut = new JoystickButton(driver, XboxController.Button.kB.value);
 
+    //* Command Buttons */
+    private final JoystickButton shootLow = new JoystickButton(driver, XboxController.Button.kX.value);
+
 
     /* Arm buttons */
     private final JoystickButton armDown = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
@@ -104,6 +107,9 @@ public class RobotContainer {
         /*Arm Commands */
         armDown.onTrue(m_Arm.setArmGoalCommand(0.7));
         armUp.onTrue(m_Arm.setArmGoalCommand(3.05));
+
+        /* Complex Commands */
+        shootLow.onTrue(new ShootLow(m_Arm,m_Intake));
 
     }
 

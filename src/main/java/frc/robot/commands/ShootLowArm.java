@@ -7,26 +7,26 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-public class ArmUp extends CommandBase {
-  /** Creates a new ArmUp. */
+public class ShootLowArm extends CommandBase {
+  /** Creates a new ShootLow. */
   private final Arm m_Arm;
-  public ArmUp(Arm subsystem) {
+  public ShootLowArm(Arm arm_subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_Arm = subsystem;
+    m_Arm = arm_subsystem;
     addRequirements(m_Arm);
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Arm.setGoal(3.05);
-
+    m_Arm.setGoal(1.5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+   
   }
 
   // Called once the command ends or is interrupted.

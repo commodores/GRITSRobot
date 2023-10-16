@@ -43,18 +43,24 @@ public class AutoCommands {
           new Nothing()
         ));
 
-        /////Auto Balance Tester//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        List<PathPlannerTrajectory> ScoreMidThanLow = PathPlanner.loadPathGroup("", new PathConstraints(1, 1));
+        /////Score mid than low on non substation side//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<PathPlannerTrajectory> ScoreMidThanLow = PathPlanner.loadPathGroup("ScoreMidThanLow", new PathConstraints(1, 1));
         autos.put("ScoreMidThanLow", new SequentialCommandGroup(
-            new Shoot(RobotContainer.m_Intake).withTimeout(2.5),
-            new IntakeInn(RobotContainer.m_Intake).withTimeout(.5),
+            new IntakeInn(RobotContainer.m_Intake).withTimeout(.3),   
+            new Shoot(RobotContainer.m_Intake).withTimeout(.5),
             getCommand(ScoreMidThanLow),
-            new Shoot(RobotContainer.m_Intake).withTimeout(3)
+            new Shoot(RobotContainer.m_Intake).withTimeout(1)
         )); 
        
        
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+        /////Score mid than low on substation side ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<PathPlannerTrajectory> ScoreMid = PathPlanner.loadPathGroup("ScoreMid", new PathConstraints(1, 1));
+        autos.put("ScoreMid", new SequentialCommandGroup(
+            new IntakeInn(RobotContainer.m_Intake).withTimeout(.3),   
+            new Shoot(RobotContainer.m_Intake).withTimeout(.5),
+            getCommand(ScoreMid),
+            new Shoot(RobotContainer.m_Intake).withTimeout(1)
+        )); 
         
 
     }
