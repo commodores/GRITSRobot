@@ -128,6 +128,9 @@ public final class Constants {
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
+
+        public static final double speedMod = 0.5;
+        public static final double balanceSpeedMod = .47;
     }
 
     public static final class ArmConstants {
@@ -163,11 +166,18 @@ public final class Constants {
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
-        public static final double kPXandYControllers =1;
+        public static final double kPXController = 3;
+        public static final double kPYController = 3;
+        public static final double kPThetaController = 4;
+        public static final double kPXandYControllers = 4;
+
+        public static final double maxPlatformPositivePitch = 6;
+        public static final double maxPlatformNegativePitch = -6;
+
+        public static final double desiredBalanceAngle = -1.6;
+        public static final double balanceP = .5;
     
+        
         /* Constraint for the motion profilied robot angle controller */
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(

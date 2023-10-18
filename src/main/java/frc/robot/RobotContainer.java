@@ -98,7 +98,7 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
         /* Intake Commands */
-        intakeIn.onTrue(new IntakeInn(m_Intake));
+        intakeIn.onTrue(new CubePickup(m_Arm,m_Intake));
         intakeIn.onFalse(new InstantCommand(() -> m_Intake.runIntakeSpeed(0, 0)));
       
         intakeOut.onTrue(new InstantCommand(() -> m_Intake.runIntakeSpeed(1, 1)));

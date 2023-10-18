@@ -43,24 +43,40 @@ public class AutoCommands {
           new Nothing()
         ));
 
-        /////Score mid than low on non substation side//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        List<PathPlannerTrajectory> ScoreMidThanLow = PathPlanner.loadPathGroup("ScoreMidThanLow", new PathConstraints(1, 1));
-        autos.put("ScoreMidThanLow", new SequentialCommandGroup(
-            new IntakeInn(RobotContainer.m_Intake).withTimeout(.3),   
+        /////Score mid then shoot two in on non substation side//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<PathPlannerTrajectory> BumpThreePiece = PathPlanner.loadPathGroup("BumpThreePiece", new PathConstraints(2, 2));
+        autos.put("BumpThreePiece", new SequentialCommandGroup(  
             new Shoot(RobotContainer.m_Intake).withTimeout(.5),
-            getCommand(ScoreMidThanLow),
+            getCommand(BumpThreePiece),
             new Shoot(RobotContainer.m_Intake).withTimeout(1)
         )); 
        
        
         /////Score mid than low on substation side ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        List<PathPlannerTrajectory> ScoreMid = PathPlanner.loadPathGroup("ScoreMid", new PathConstraints(1, 1));
-        autos.put("ScoreMid", new SequentialCommandGroup(
-            new IntakeInn(RobotContainer.m_Intake).withTimeout(.3),   
+        List<PathPlannerTrajectory> NonBumpThreePiece = PathPlanner.loadPathGroup("NonBumpThreePiece", new PathConstraints(3.5, 3));
+        autos.put("NonBumpThreePiece", new SequentialCommandGroup(  
             new Shoot(RobotContainer.m_Intake).withTimeout(.5),
-            getCommand(ScoreMid),
-            new Shoot(RobotContainer.m_Intake).withTimeout(1)
-        )); 
+            getCommand(NonBumpThreePiece),
+            new Shoot(RobotContainer.m_Intake).withTimeout(0.5)
+        ));
+
+        /////charge ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<PathPlannerTrajectory> Charge = PathPlanner.loadPathGroup("Charge", new PathConstraints(1.5, 1));
+        autos.put("Charge", new SequentialCommandGroup(  
+            new Shoot(RobotContainer.m_Intake).withTimeout(.5),
+            getCommand(Charge),
+            new AutoBalanceCommand(RobotContainer.s_Swerve)
+        ));
+
+        //Events////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        eventMap.put("ArmDown", new ArmDown(RobotContainer.m_Arm));
+        eventMap.put("IntakeInn", new IntakeInn(RobotContainer.m_Intake));
+        eventMap.put("ArmUp", new ArmUp(RobotContainer.m_Arm));
+        eventMap.put("ShootLow", new ShootLow(RobotContainer.m_Arm, RobotContainer.m_Intake));
+        eventMap.put("CubePickup", new CubePickup(RobotContainer.m_Arm, RobotContainer.m_Intake));
+        eventMap.put("Shoot", new Shoot(RobotContainer.m_Intake));
+        eventMap.put("StopIntake", new StopIntake(RobotContainer.m_Intake));
+        
         
 
     }
