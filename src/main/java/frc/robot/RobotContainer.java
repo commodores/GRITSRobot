@@ -10,10 +10,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -29,6 +27,7 @@ public class RobotContainer {
     private final AutoCommands autos;    
     /* Controllers */
     private final Joystick driver = new Joystick(0);
+    private final Joystick driver2 = new Joystick(0);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -42,14 +41,20 @@ public class RobotContainer {
     private final JoystickButton intakeIn = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton intakeOut = new JoystickButton(driver, XboxController.Button.kB.value);
 
+    private final JoystickButton d2_intakeIn = new JoystickButton(driver2, XboxController.Button.kA.value);
+    private final JoystickButton d2_intakeOut = new JoystickButton(driver2, XboxController.Button.kB.value);
+
     //* Command Buttons */
     private final JoystickButton shootLow = new JoystickButton(driver, XboxController.Button.kX.value);
 
+    private final JoystickButton d2_shootLow = new JoystickButton(driver2, XboxController.Button.kX.value);
 
     /* Arm buttons */
     private final JoystickButton armDown = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton armUp = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
+    private final JoystickButton d2_armDown = new JoystickButton(driver2, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton d2_armUp = new JoystickButton(driver2, XboxController.Button.kRightBumper.value);
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -64,7 +69,7 @@ public class RobotContainer {
                 s_Swerve, 
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
+                () -> -driver.getRawAxis(rotationAxis)*.8, 
                 () -> false
             )
         );
@@ -100,16 +105,27 @@ public class RobotContainer {
         /* Intake Commands */
         intakeIn.onTrue(new CubePickup(m_Arm,m_Intake));
         intakeIn.onFalse(new InstantCommand(() -> m_Intake.runIntakeSpeed(0, 0)));
+
+        d2_intakeIn.onTrue(new CubePickup(m_Arm,m_Intake));
+        d2_intakeIn.onFalse(new InstantCommand(() -> m_Intake.runIntakeSpeed(0, 0)));
       
         intakeOut.onTrue(new InstantCommand(() -> m_Intake.runIntakeSpeed(1, 1)));
         intakeOut.onFalse(new InstantCommand(() -> m_Intake.runIntakeSpeed(0, 0)));
+
+        d2_intakeOut.onTrue(new InstantCommand(() -> m_Intake.runIntakeSpeed(1, 1)));
+        d2_intakeOut.onFalse(new InstantCommand(() -> m_Intake.runIntakeSpeed(0, 0)));
         
         /*Arm Commands */
         armDown.onTrue(m_Arm.setArmGoalCommand(0.7));
         armUp.onTrue(m_Arm.setArmGoalCommand(3.05));
 
+        d2_armDown.onTrue(m_Arm.setArmGoalCommand(0.7));
+        d2_armUp.onTrue(m_Arm.setArmGoalCommand(3.05));
+
         /* Complex Commands */
         shootLow.onTrue(new ShootLow(m_Arm,m_Intake));
+
+        d2_shootLow.onTrue(new ShootLow(m_Arm,m_Intake));
 
     }
 

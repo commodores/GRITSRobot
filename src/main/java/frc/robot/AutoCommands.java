@@ -25,7 +25,6 @@ public class AutoCommands {
     public final Map<String, SequentialCommandGroup> autos;
     public final Map<String, Command> eventMap;
     private SwerveAutoBuilder autoBuilder;
-    private PathPlannerTrajectory trajectory;
 
     //Example Multi-Path
     
