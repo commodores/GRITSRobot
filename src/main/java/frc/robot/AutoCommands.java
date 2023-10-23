@@ -46,8 +46,7 @@ public class AutoCommands {
         List<PathPlannerTrajectory> BumpThreePiece = PathPlanner.loadPathGroup("BumpThreePiece", new PathConstraints(2, 2));
         autos.put("BumpThreePiece", new SequentialCommandGroup(  
             new Shoot(RobotContainer.m_Intake).withTimeout(.5),
-            getCommand(BumpThreePiece),
-            new Shoot(RobotContainer.m_Intake).withTimeout(1)
+            getCommand(BumpThreePiece)
         )); 
        
        
@@ -66,6 +65,26 @@ public class AutoCommands {
             getCommand(Charge),
             new AutoBalanceCommand(RobotContainer.s_Swerve)
         ));
+
+        /////Score than Charge than Score Non Bump Side///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<PathPlannerTrajectory> ScoreChargeScoreNonBump = PathPlanner.loadPathGroup("ScoreChargeScoreNonBump", new PathConstraints(1.5, 1));
+        autos.put("ScoreChargeScoreNonBump", new SequentialCommandGroup(  
+            new Shoot(RobotContainer.m_Intake).withTimeout(.5),
+            getCommand(ScoreChargeScoreNonBump),
+            new AutoBalanceCommand(RobotContainer.s_Swerve),
+            new ShootFar(RobotContainer.m_Intake).withTimeout(.5)
+        ));
+
+        /////Score than Charge than Score Bump Side///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<PathPlannerTrajectory> ScoreChargeScoreBump = PathPlanner.loadPathGroup("ScoreChargeScoreBump", new PathConstraints(1.5, 1));
+        autos.put("ScoreChargeScoreBump", new SequentialCommandGroup(  
+            new Shoot(RobotContainer.m_Intake).withTimeout(.5),
+            getCommand(ScoreChargeScoreBump),
+            new AutoBalanceCommand(RobotContainer.s_Swerve),
+            new ShootFar(RobotContainer.m_Intake).withTimeout(.5)
+        ));
+
+
 
         //Events////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         eventMap.put("ArmDown", new ArmDown(RobotContainer.m_Arm));
