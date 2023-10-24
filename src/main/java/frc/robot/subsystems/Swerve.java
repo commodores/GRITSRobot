@@ -102,6 +102,17 @@ public class Swerve extends SubsystemBase {
         gyro.setYaw(0);
     }
 
+     /** Reset Gyro for Driver */
+     public void flipGyro(){
+        setGyro(180);
+    }
+
+     /** Resets the gyro to a given heading */
+     public void setGyro(double angle){
+        gyro.setYaw(angle);
+    }
+
+
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
